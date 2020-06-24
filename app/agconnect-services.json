@@ -1,0 +1,12 @@
+{
+	"client":{
+		"cp_id":"2640063000002730039",
+		"product_id":"736430079244529176",
+		"client_id":"391498851246146688",
+		"client_secret":"A4E3478CE856E8AC863F3B70E58FAFC7023225E73F845C2E312B4873583FA8CB",
+		"app_id":"102454931",
+		"package_name":"com.hms.ias",
+		"api_key":"CgB6e3x9OtYVeuqKONPJTK1k1TDv5i3kC55RhkGgKp1vLoImq7vZTiErFCiVoORRs5ogWclnhTjkkRhDrb0L7SU2"
+	},
+	"configuration_version":"1.0"
+}

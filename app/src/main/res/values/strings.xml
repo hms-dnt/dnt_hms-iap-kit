@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">InAppPurchase</string>
+    <string name="prodId">Product ID : </string>
+    <string name="prodName">Product Name : </string>
+    <string name="prodDesc">Product Description : </string>
+    <string name="prodPrice">Price : </string>
+    <string name="prodDetails">Product Details</string>
+    <string name="imageDesc">Image</string>
+    <string name="btnPurchase">PURCHASE</string>
+    <string name="btnSignIn">Sign In</string>
+    <string name="btnSignedIn">Signed In</string>
+</resources>
