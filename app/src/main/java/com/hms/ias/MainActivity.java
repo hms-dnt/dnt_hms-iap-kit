@@ -93,7 +93,6 @@ class ProductAdapter extends ArrayAdapter {
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String publicKey = "MIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEA257+qq89jiz3O2j6RZDEysoiVLgzVUtCIFrPZKv5pUtYHpYExdFUjhRQTCAqQTbxCtMJH0JkSJrNz/kOWfKuDTcMvy9yWTCFp7x97MEswq2vNNxUbMnpRxyuUQMph6J0P5rQuflP/0O5m9axvCBQ5SDGiHERJZeZxw2/Aj0yYYFESs59DsBdt6sqmyJfiEZ/CQiOSCLTiscpzAnbWBO3qBrGOLQj1YIeLvJb/sjyHPmVXGdfa473hsr9h1yOGA1qCnMlbIOF5z5UNwbwMRvFyiE/PT/hrYMzsWR9bB0j4HUSTXEXIQrwoXbtH8+ICdjyVRdap2hq4nGLS/GkKFdaYsEVWnQ1cpMTOH4Fu2DueTlYZJw/Ql1/XUjoz3P48U9Oo0IQIB1SIngXMuhZuhjM83oXs4U3uxCRYnSKs1txmKvIZbBUSfRVAXshcSvD3ivaEdmUGqL28bCrX0zFyQ8LXmKhy9Wb8XLctrtpjb27SpifjfTjzMt2NDFmm7LJGY5jAgMBAAE=";
     private int REQUEST_SIGN_IN_LOGIN = 1002;
 
     ListView listView;
@@ -175,27 +174,30 @@ public class MainActivity extends AppCompatActivity {
         ProductInfoReq productInfoReq = new ProductInfoReq();
         productInfoReq.setPriceType(priceType);
         ArrayList<String> productIds = new ArrayList<>();
-        productIds.add("ITEM-001");
-        productIds.add("ITEM-002");
-        productIds.add("ITEM-003");
-        productIds.add("ITEM-004");
+        productIds.add("ITEM001");
+        productIds.add("ITEM002");
+        productIds.add("ITEM003");
+        productIds.add("ITEM004");
         productInfoReq.setProductIds(productIds);
         return productInfoReq;
     }
 
     void fetchProduct() {
-        IapClient inAppClient  = Iap.getIapClient(this);
+        IapClient inAppClient  = Iap.getIapClient(MainActivity.this);
 
         Task<ProductInfoResult> task = inAppClient.obtainProductInfo(productRequest(IapClient.PriceType.IN_APP_CONSUMABLE));
 
         task.addOnSuccessListener(new OnSuccessListener<ProductInfoResult>() {
             @Override
             public void onSuccess(ProductInfoResult productInfoResult) {
+
                 if (productInfoResult != null && !productInfoResult.getProductInfoList().isEmpty()) {
                     loadProduct(productInfoResult.getProductInfoList());
+                } else {
+                    Toast.makeText( MainActivity.this,"Product Fetched Error", Toast.LENGTH_LONG).show();
                 }
-            }
 
+            }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(Exception e) {
@@ -213,9 +215,9 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText( MainActivity.this, "In-App Purchase operation error", Toast.LENGTH_LONG).show();
                 }
-
             }
         });
+
     }
 
     void loadProduct( List<ProductInfo> inAppproductList) {
@@ -253,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
 
     void purchaseItem(ProductItem item) {
 
-        final Activity activity = this;
+        final Activity activity = MainActivity.this;
         IapClient purchaseClient = Iap.getIapClient(activity);
 
         PurchaseIntentReq purchaseRequest = new PurchaseIntentReq();
@@ -322,15 +324,9 @@ public class MainActivity extends AppCompatActivity {
             switch(purchaseResultInfo.getReturnCode()) {
                 case OrderStatusCode.ORDER_STATE_SUCCESS:
                     // verify signature of payment results.
-                    boolean success = CipherUtil.doCheck(purchaseResultInfo.getInAppPurchaseData(), purchaseResultInfo.getInAppDataSignature(), publicKey);
-                    if (success) {
 
-                        finalizePurchase(purchaseResultInfo);
+                    finalizePurchase(purchaseResultInfo);
 
-                    } else {
-                        Toast.makeText(this, "Payment successful, Sign-in failed", Toast.LENGTH_LONG).show();
-
-                    }
                     return;
                 case OrderStatusCode.ORDER_STATE_CANCEL:
                     Toast.makeText(this, "User cancel payment", Toast.LENGTH_LONG).show();
